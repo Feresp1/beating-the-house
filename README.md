@@ -7,21 +7,15 @@ Metodología: **CRISP-DM** | Lenguaje: **Python**
 
 ## 📋 Descripción
 
-¿Es posible construir un modelo predictivo que supere la probabilidad implícita
-de las casas de apuestas en la NFL?
+¿Es posible construir un modelo predictivo que supere la probabilidad implícita de las casas de apuestas en la NFL?
 
-Este proyecto desarrolla y evalúa tres modelos de clasificación supervisada
-(Regresión Logística, Random Forest y XGBoost) entrenados con datos históricos
-de la NFL (2002–2023) para predecir el ganador de cada partido y evaluar
-si existe una ventaja estadística explotable frente a las cuotas de las casas.
+Este proyecto desarrolla y evalúa tres modelos de clasificación supervisada (Regresión Logística, Random Forest y XGBoost) entrenados con datos históricos de la NFL (2002–2023) para predecir el ganador de cada partido.
 
 ---
 
 ## 🎯 Pregunta de negocio
 
-> ¿Puede un modelo de clasificación supervisado generar probabilidades de victoria
-> suficientemente precisas como para identificar apuestas con valor esperado
-> positivo frente a las cuotas históricas de las casas de apuestas NFL?
+> ¿Puede un modelo de clasificación supervisado generar probabilidades de victoria suficientemente precisas como para identificar apuestas con valor esperado positivo frente a las cuotas históricas de las casas?
 
 ---
 
@@ -32,9 +26,7 @@ si existe una ventaja estadística explotable frente a las cuotas de las casas.
 | `nfl_data_py` | Resultados, clima, spreads, moneylines | 2002–2023 |
 | FiveThirtyEight | ELO ratings históricos | 2002–2023 |
 
-**Muestra final:** 4,570 partidos de temporada regular
-**Variable objetivo:** `home_win` (victoria del equipo local, 0/1)
-**Tabla principal:** `dat1`
+**Muestra final:** 4,570 partidos · **Variable objetivo:** `home_win` · **Tabla principal:** `dat1`
 
 ---
 
@@ -53,34 +45,12 @@ si existe una ventaja estadística explotable frente a las cuotas de las casas.
 
 ## 🏆 Resultados
 
-### Torneo de finalistas (Test Set 2022–2023)
-
-| Modelo | AUC-ROC | Accuracy | F1 |
-|--------|---------|----------|----|
-| Regresión Logística (L1, C=0.1) | 0.6923 | 60.3% | 0.567 |
-| Random Forest (depth=5) | 0.7031 | 60.6% | 0.567 |
-| **XGBoost (depth=3, lr=0.01)** ✅ | **0.7031** | **65.5%** | **0.665** |
-| Baseline (casas de apuestas) | 0.7126 | 68.4% | — |
-
-### Simulación financiera ($100 por partido)
-
-| Estrategia | Ganancia neta | ROI |
-|------------|--------------|-----|
-| **XGBoost (ganador predicho)** | **+$140.78** | **+0.30%** |
-| Siempre apostar al local | -$81.68 | -0.17% |
-| Apostar al azar | ~-$4,500 | ~-9.57% |
-
----
-
-## 📁 Estructura del repositorio
-
-```
-beating-the-house/
-│
-├── beating_the_house.ipynb   ← Notebook principal (27 celdas)
-├── modelo_xgb_final.pkl      ← Modelo XGBoost serializado
-├── README.md                 ← Este archivo
-```
+| Modelo | AUC-ROC | Accuracy | ROI ($100/partido) |
+|--------|---------|----------|--------------------|
+| Regresión Logística | 0.6923 | 60.3% | — |
+| Random Forest | 0.7031 | 60.6% | — |
+| **XGBoost** ✅ | **0.7031** | **65.5%** | **+0.30%** |
+| Baseline (casas) | 0.7126 | 68.4% | — |
 
 ---
 
@@ -90,8 +60,7 @@ beating-the-house/
 pip install nfl_data_py pandas numpy scikit-learn xgboost matplotlib
 ```
 
-> **Nota:** Los datos se descargan automáticamente via `nfl_data_py`.
-> No se requiere ningún archivo CSV externo.
+> Los datos se descargan automáticamente via `nfl_data_py`. No se requiere ningún CSV externo.
 
 ---
 
@@ -99,21 +68,10 @@ pip install nfl_data_py pandas numpy scikit-learn xgboost matplotlib
 
 | ID | Decisión | Justificación |
 |----|----------|---------------|
-| DM-01 | Temporada 2020 excluida del modelado | COVID-19 eliminó la ventaja de localía (-6.9 pp) |
+| DM-01 | Temporada 2020 excluida | COVID-19 eliminó la ventaja de localía (-6.9 pp) |
 | DM-02 | temp/wind = 0 en estadios techados | El clima no aplica en estadios con techo |
-| DM-03 | Moneylines faltantes (2002–2006) excluidos del cálculo de EV | No hay cuota disponible |
+| DM-03 | Moneylines 2002–2006 excluidos del cálculo de EV | No hay cuota disponible |
 | DM-04 | Surface imputado por moda del equipo local | 41 faltantes (<1%) |
-
----
-
-## 📌 Conclusión
-
-El mercado de apuestas NFL es altamente eficiente pero no impenetrable.
-El modelo XGBoost logra **65.5% de accuracy** y un **ROI de +0.30%**
-apostando $100 por partido en el test set — superando la estrategia naive
-y al azar. Para alcanzar ventaja estadística consistente se requieren
-features en tiempo real (injury reports, movimiento de líneas) que
-las casas ya incorporan en sus cuotas.
 
 ---
 
